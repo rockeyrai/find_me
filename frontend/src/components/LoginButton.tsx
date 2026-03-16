@@ -1,9 +1,14 @@
+'use client';
+
 import React from 'react';
 
 const GoogleLoginButton = () => {
   const handleLogin = () => {
-    // 1. Generate a random 'state' to prevent CSRF (Cross-Site Request Forgery)
-    const state = Math.random().toString(36).substring(7);
+    // 1. Generate a cryptographically secure 'state' to prevent CSRF (Cross-Site Request Forgery)
+    const array = new Uint8Array(16);
+    window.crypto.getRandomValues(array);
+    const state = Array.from(array, dec => dec.toString(16).padStart(2, '0')).join('');
+    
     localStorage.setItem('auth_state', state);
 
     // 2. Construct the Google OAuth URL manually
