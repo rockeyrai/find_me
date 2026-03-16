@@ -30,15 +30,16 @@ export default function AuthCallback() {
     hasFetched.current = true;
 
     // Send code to Express backend
-    fetch('/api/auth/google/verify', {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/google`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ code }),
     })
       .then(async (res) => {
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
-          throw new Error(data.message || 'Authentication verification failed');
+          throw new Error(data.error || data.message || 'Authentication verification failed');
         }
         // Cleanup state
         localStorage.removeItem('auth_state');
