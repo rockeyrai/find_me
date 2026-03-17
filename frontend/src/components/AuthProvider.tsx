@@ -55,10 +55,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const logout = async () => {
-    setUser(null);
-    // You could also call an API to clear the cookie if needed, but cookie can be cleared on client or via API
-    document.cookie = 'session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    router.push('/');
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001'}/api/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (error) {
+      console.error('Failed to logout on server:', error);
+    } finally {
+      setUser(null);
+      // Clean up any remaining client-side cookies just in case
+      document.cookie = 'session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      router.push('/');
+    }
   };
 
   return (
