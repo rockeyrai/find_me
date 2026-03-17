@@ -43,7 +43,7 @@ export default function AuthCallback() {
         }
         // Cleanup state
         localStorage.removeItem('auth_state');
-        router.push('/dashboard');
+        router.push('/home');
       })
       .catch((err) => {
         setError(err.message || "An error occurred during authentication.");
