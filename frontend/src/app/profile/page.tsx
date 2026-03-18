@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../components/AuthProvider';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthProvider';
 
 const ProfilePage = () => {
   const { user, loading, logout } = useAuth();
